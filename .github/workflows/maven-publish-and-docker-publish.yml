@@ -38,13 +38,13 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    needs: build
     permissions:
       contents: read
       packages: write
 
     steps:
       - uses: actions/checkout@v3
-      - needs: maven
 
       - name: Download artifact from maven job
         uses: actions/download-artifact@v3
@@ -59,13 +59,12 @@ jobs:
 
   verify:
     runs-on: ubuntu-latest
+    needs: docker
     permissions:
       contents: read
       packages: write
 
     steps:
       - uses: actions/checkout@v3
-      - needs: docker
-
       - name: Verify the Docker image
         run: ./verify-image.sh
